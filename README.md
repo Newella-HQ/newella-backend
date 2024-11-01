@@ -1,2 +1,2 @@
 # newella-backend
-Newella microservices backends.
+Newella microservices backend.
