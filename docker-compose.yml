@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile_AuthService
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - postgres-db
+    networks:
+      - appnet
+
+  postgres-db:
+    image: postgres:alpine3.20
+    container_name: postgres-db
+    restart: unless-stopped
+    volumes:
+      - newella_db_tmp:/var/lib/postgresql/data
+    expose:
+      - "${POSTGRES_PORT}"
+    command: -p ${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_NAME}
+    networks:
+      - appnet
+
+volumes:
+  newella_db_tmp:
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
