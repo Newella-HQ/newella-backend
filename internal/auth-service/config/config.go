@@ -16,29 +16,42 @@ type AuthServiceConfig struct {
 	JWTConfig      config.JWTConfig
 }
 
-func InitAuthServiceConfig() (*AuthServiceConfig, error) {
+func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
+	defer func() {
+		if recErr := recover(); recErr != nil {
+			err = fmt.Errorf("empty config parameter")
+		}
+	}()
+
 	if err := godotenv.Load(); err != nil {
 		return nil, fmt.Errorf("can't get env variables: %w", err)
 	}
 
 	return &AuthServiceConfig{
 		PostgresConfig: config.PostgresConfig{
-			Host:     os.Getenv("POSTGRES_HOST"),
-			Port:     os.Getenv("POSTGRES_PORT"),
-			Username: os.Getenv("POSTGRES_USERNAME"),
-			Password: os.Getenv("POSTGRES_PASSWORD"),
-			Name:     os.Getenv("POSTGRES_NAME"),
-			SSLMode:  os.Getenv("POSTGRES_SSLMODE"),
+			Host:     panicIfEmpty(os.Getenv("POSTGRES_HOST")),
+			Port:     panicIfEmpty(os.Getenv("POSTGRES_PORT")),
+			Username: panicIfEmpty(os.Getenv("POSTGRES_USERNAME")),
+			Password: panicIfEmpty(os.Getenv("POSTGRES_PASSWORD")),
+			Name:     panicIfEmpty(os.Getenv("POSTGRES_NAME")),
+			SSLMode:  panicIfEmpty(os.Getenv("POSTGRES_SSLMODE")),
 		},
 		ServerConfig: config.ServerConfig{
-			Port: os.Getenv("SERVER_PORT"),
+			Port: panicIfEmpty(os.Getenv("SERVER_PORT")),
 		},
 		OAuthConfig: config.OAuthConfig{
-			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+			ClientID:     panicIfEmpty(os.Getenv("GOOGLE_CLIENT_ID")),
+			ClientSecret: panicIfEmpty(os.Getenv("GOOGLE_CLIENT_SECRET")),
 		},
 		JWTConfig: config.JWTConfig{
-			SigningKey: os.Getenv("JWT_SIGNING_KEY"),
+			SigningKey: panicIfEmpty(os.Getenv("JWT_SIGNING_KEY")),
 		},
 	}, nil
+}
+
+func panicIfEmpty(s string) string {
+	if s == "" {
+		panic("empty config parameter")
+	}
+	return s
 }
