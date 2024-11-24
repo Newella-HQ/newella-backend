@@ -29,6 +29,15 @@ CREATE TABLE IF NOT EXISTS slides
     FOREIGN KEY (prev_slide_id) REFERENCES slides (id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS progresses
+(
+    id            SERIAL PRIMARY KEY,
+    slide_id      INTEGER NOT NULL,
+    user_novel_id INTEGER NOT NULL,
+    FOREIGN KEY (user_novel_id) REFERENCES users_novels (id) ON DELETE CASCADE,
+    FOREIGN KEY (slide_id) REFERENCES slides (id) ON DELETE CASCADE
+);
+
 ALTER TABLE IF EXISTS slide_groups
     ADD FOREIGN KEY (start_slide_id) REFERENCES slides (id) ON DELETE CASCADE,
     ADD FOREIGN KEY (end_slide_id) REFERENCES slides (id) ON DELETE CASCADE;

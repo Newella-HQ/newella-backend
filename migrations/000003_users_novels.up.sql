@@ -8,15 +8,6 @@ CREATE TABLE IF NOT EXISTS users_novels
     FOREIGN KEY (novel_id) REFERENCES novels (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS progresses
-(
-    id            SERIAL PRIMARY KEY,
-    slide_id      INTEGER NOT NULL,
-    user_novel_id INTEGER NOT NULL,
-    FOREIGN KEY (user_novel_id) REFERENCES users_novels (id) ON DELETE CASCADE,
-    FOREIGN KEY (slide_id) REFERENCES slides (id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS ratings
 (
     id       SERIAL PRIMARY KEY,

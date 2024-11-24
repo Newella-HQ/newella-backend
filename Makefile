@@ -5,10 +5,15 @@ endif
 
 .PHONY: migrateUp
 migrateUp:
-	docker run -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
-		-database 'postgres://postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' up
+	docker run --rm -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
+		-database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' up
 
 .PHONY: migrateDown
 migrateDown:
-	docker run -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
-		-database 'postgres://postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' down
+	yes | docker run --rm -i -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
+		-database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' down
+
+.PHONY: migrateDrop
+migrateDrop:
+	yes | docker run --rm -i -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
+		-database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' drop
