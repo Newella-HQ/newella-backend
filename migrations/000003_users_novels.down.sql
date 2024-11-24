@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS complaints;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS ratings;
+
+DROP TABLE IF EXISTS progresses;
+DROP TABLE IF EXISTS users_novels;
