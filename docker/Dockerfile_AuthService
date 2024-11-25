@@ -1,8 +1,9 @@
 FROM golang:1.23-alpine3.19
 
-RUN go env -w GOPATH=/
+ENV GOPATH=/
 RUN go env -w GOCACHE=/.cache
 
+WORKDIR /  # go: no modules specified (see 'go help mod download')
 COPY ./ ./
 
 RUN go mod download

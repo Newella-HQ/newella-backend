@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 
 	"github.com/Newella-HQ/newella-backend/internal/config"
 )
@@ -14,12 +16,13 @@ type AuthServiceConfig struct {
 	ServerConfig   config.ServerConfig
 	OAuthConfig    config.OAuthConfig
 	JWTConfig      config.JWTConfig
+	LogLevel       config.LogLevel
 }
 
 func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
 	defer func() {
 		if recErr := recover(); recErr != nil {
-			err = fmt.Errorf("empty config parameter")
+			err = fmt.Errorf("can't init auth config: %s", recErr)
 		}
 	}()
 
@@ -29,29 +32,53 @@ func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
 
 	return &AuthServiceConfig{
 		PostgresConfig: config.PostgresConfig{
-			Host:     panicIfEmpty(os.Getenv("POSTGRES_HOST")),
-			Port:     panicIfEmpty(os.Getenv("POSTGRES_PORT")),
-			Username: panicIfEmpty(os.Getenv("POSTGRES_USERNAME")),
-			Password: panicIfEmpty(os.Getenv("POSTGRES_PASSWORD")),
-			Name:     panicIfEmpty(os.Getenv("POSTGRES_NAME")),
-			SSLMode:  panicIfEmpty(os.Getenv("POSTGRES_SSLMODE")),
+			Host:     GetAndValidateEnv("POSTGRES_HOST"),
+			Port:     GetAndValidateEnv("POSTGRES_PORT"),
+			Username: GetAndValidateEnv("POSTGRES_USERNAME"),
+			Password: GetAndValidateEnv("POSTGRES_PASSWORD"),
+			Name:     GetAndValidateEnv("POSTGRES_NAME"),
+			SSLMode:  GetAndValidateEnv("POSTGRES_SSLMODE"),
 		},
 		ServerConfig: config.ServerConfig{
-			Port: panicIfEmpty(os.Getenv("SERVER_PORT")),
+			Host: GetAndValidateEnv("SERVER_HOST"),
+			Port: GetAndValidateEnv("AUTH_SERVER_PORT"),
 		},
 		OAuthConfig: config.OAuthConfig{
-			ClientID:     panicIfEmpty(os.Getenv("GOOGLE_CLIENT_ID")),
-			ClientSecret: panicIfEmpty(os.Getenv("GOOGLE_CLIENT_SECRET")),
+			ClientID:     GetAndValidateEnv("GOOGLE_CLIENT_ID"),
+			ClientSecret: GetAndValidateEnv("GOOGLE_CLIENT_SECRET"),
 		},
 		JWTConfig: config.JWTConfig{
-			SigningKey: panicIfEmpty(os.Getenv("JWT_SIGNING_KEY")),
+			SigningKey: GetAndValidateEnv("JWT_SIGNING_KEY"),
 		},
+		LogLevel: config.ConvertLogLevel(GetAndValidateEnv("LOG_LEVEL")),
 	}, nil
 }
 
-func panicIfEmpty(s string) string {
+func GetAndValidateEnv(key string) string {
+	s := os.Getenv(key)
 	if s == "" {
-		panic("empty config parameter")
+		panic(fmt.Sprintf("empty %s parameter", key))
 	}
+
 	return s
+}
+
+const (
+	UserInfoEmailScope   = "https://www.googleapis.com/auth/userinfo.email"
+	UserInfoProfileScope = "https://www.googleapis.com/auth/userinfo.profile"
+	OpenIDScope          = "openid"
+)
+
+func (cfg *AuthServiceConfig) NewOAuth2Config() *oauth2.Config {
+	return &oauth2.Config{
+		ClientID:     cfg.OAuthConfig.ClientID,
+		ClientSecret: cfg.OAuthConfig.ClientSecret,
+		Endpoint:     google.Endpoint,
+		RedirectURL:  getRedirectURL(cfg.ServerConfig),
+		Scopes:       []string{UserInfoProfileScope, UserInfoEmailScope, OpenIDScope},
+	}
+}
+
+func getRedirectURL(cfg config.ServerConfig) string {
+	return fmt.Sprintf("http://%s:%s/redirect", cfg.Host, cfg.Port)
 }
