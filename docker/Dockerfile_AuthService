@@ -1,0 +1,12 @@
+FROM golang:1.23-alpine3.19
+
+ENV GOPATH=/
+RUN go env -w GOCACHE=/.cache
+
+WORKDIR /  # go: no modules specified (see 'go help mod download')
+COPY ./ ./
+
+RUN go mod download
+RUN --mount=type=cache,target=/.cache go build -v -o auth-service ./cmd/auth-service
+
+CMD ["./auth-service"]

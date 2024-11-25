@@ -3,6 +3,7 @@
 -- SET session_replication_role = 'origin';
 
 DROP TABLE IF EXISTS slides_answers;
+DROP TABLE IF EXISTS progresses;
 
 ALTER TABLE IF EXISTS slide_groups
     DROP CONSTRAINT IF EXISTS slide_groups_start_slide_id_fkey,
