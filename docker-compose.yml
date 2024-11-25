@@ -1,16 +1,16 @@
 services:
-#  auth-service:
-#    build:
-#      context: ./docker
-#      dockerfile: Dockerfile_AuthService
-#    container_name: auth-service
-#    restart: unless-stopped
-#    ports:
-#      - "${SERVER_PORT}:${SERVER_PORT}"
-#    depends_on:
-#      - postgres-db
-#    networks:
-#      - appnet
+  auth-service:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile_AuthService
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "${AUTH_SERVER_PORT}:${AUTH_SERVER_PORT}"
+    depends_on:
+      - postgres-db
+    networks:
+      - appnet
 
   postgres-db:
     image: postgres:alpine3.20
