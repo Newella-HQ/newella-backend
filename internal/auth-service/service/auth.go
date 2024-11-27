@@ -11,7 +11,7 @@ import (
 
 const (
 	_cacheTTL   = 5 * time.Minute
-	_oauthState = "newella-aut-service"
+	_oauthState = "newella-auth-service"
 )
 
 type AuthStorage interface {
@@ -36,7 +36,7 @@ func NewAuthService(logger logger.Logger, storage AuthStorage, cache *cache.Cach
 func (s *AuthService) GenerateAuthURL() string {
 	code := oauth2.GenerateVerifier()
 	s.cache.Set(code, true, _cacheTTL)
-
+	s.logger.Infof("code = %s", code)
 	opt := oauth2.S256ChallengeOption(code)
 
 	return s.oauthCfg.AuthCodeURL(_oauthState, opt)

@@ -17,3 +17,11 @@ migrateDown:
 migrateDrop:
 	yes | docker run --rm -i -v ./migrations:/migrations --network appnet migrate/migrate -path=./migrations \
 		-database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=$(POSTGRES_SSLMODE)' drop
+
+.PHONY: up
+up:
+	docker compose up -d --build
+
+.PHONY: down
+down:
+	docker compose down -v

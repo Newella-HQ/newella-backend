@@ -1,8 +1,8 @@
 services:
   auth-service:
     build:
-      context: ./docker
-      dockerfile: Dockerfile_AuthService
+      context: .
+      dockerfile: ./docker/Dockerfile_AuthService
     container_name: auth-service
     restart: unless-stopped
     ports:
