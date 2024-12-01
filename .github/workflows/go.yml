@@ -1,8 +1,6 @@
 name: GoPipeline
 
-on:
-  pull_request:
-    types: [opened, edited]
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -19,8 +17,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GOPATH: /
-        GOCACHE: /.cache
-      run: --mount=type=cache,target=/.cache go build -mod=vendor -v -o auth-service ./cmd/auth-service
+      run: go build -mod=vendor -v -o auth-service ./cmd/auth-service
 
     - name: Test
       run: go test -v ./...

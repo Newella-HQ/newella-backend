@@ -50,6 +50,7 @@ func (s *AuthStorage) SaveUser(ctx context.Context, oauthJWT model.OAuthJWTToken
 						picture=excluded.picture
 					RETURNING role`
 
+	//nolint:gosec
 	insertTokens := `INSERT INTO oauth_tokens (access_token, refresh_token, user_id)
 					 VALUES ($1, $2, $3)
 					 ON CONFLICT (user_id)
@@ -98,6 +99,7 @@ func (s *AuthStorage) GetTokensPair(ctx context.Context, refreshToken, userID st
 }
 
 func (s *AuthStorage) UpdateTokens(ctx context.Context, pair model.TokenPair, userID string) error {
+	//nolint:gosec
 	insertTokens := `INSERT INTO oauth_tokens (access_token, refresh_token, user_id)
 					 VALUES ($1, $2, $3)
 					 ON CONFLICT (user_id)
@@ -116,7 +118,7 @@ func (s *AuthStorage) UpdateTokens(ctx context.Context, pair model.TokenPair, us
 }
 
 func (s *AuthStorage) RemoveTokens(ctx context.Context, userID string) error {
-	deleteTokens := `DELETE FROM oauth_tokens WHERE user_id=$1`
+	deleteTokens := `DELETE FROM oauth_tokens WHERE user_id=$1` //nolint:gosec
 
 	dbCtx, cancel := context.WithTimeout(ctx, s.dbTimeout)
 	defer cancel()
