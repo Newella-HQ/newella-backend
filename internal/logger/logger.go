@@ -32,6 +32,8 @@ type ZapLogger struct {
 
 func NewZapLogger(level config.LogLevel) (*ZapLogger, error) {
 	cfg := zap.NewProductionConfig()
+	cfg.OutputPaths = []string{"stdout"}
+	cfg.ErrorOutputPaths = []string{"stdout"}
 
 	switch level {
 	case config.Debug:
@@ -50,7 +52,7 @@ func NewZapLogger(level config.LogLevel) (*ZapLogger, error) {
 	}
 
 	return &ZapLogger{
-		logger: l.Sugar().With("log_level", l.Level()),
+		logger: l.Sugar(),
 	}, nil
 }
 

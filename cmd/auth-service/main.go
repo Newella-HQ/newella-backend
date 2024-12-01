@@ -35,18 +35,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("can't init logger: %s\n", err)
 	}
-	defer func() {
-		if err := zapLogger.Sync(); err != nil {
+	defer func(zapLogger *logger.ZapLogger) {
+		err := zapLogger.Sync()
+		if err != nil && (!errors.Is(err, syscall.EBADF) && !errors.Is(err, syscall.ENOTTY)) {
 			zapLogger.Errorf("can't sync logger: %s", err)
 		}
-	}()
+	}(zapLogger)
 
 	serverContext, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
 	dbConn, err := pgx.Connect(serverContext, sharedcfg.ConvertPostgresConfigToConnectionString(authConfig.PostgresConfig))
 	if err != nil {
-		zapLogger.Fatalln("can't connect to db")
+		zapLogger.Fatalf("can't connect to db: %s", err)
 	}
 	defer func() {
 		if err := dbConn.Close(serverContext); err != nil {
@@ -57,8 +58,8 @@ func main() {
 	oauthCodesCache := cache.New(_cacheTTL)
 	oauthConfig := authConfig.NewOAuth2Config()
 
-	authStorage := storage.NewAuthStorage(zapLogger, dbConn)
-	authService := service.NewAuthService(zapLogger, authStorage, oauthCodesCache, oauthConfig)
+	authStorage := storage.NewAuthStorage(zapLogger, dbConn, authConfig.DatabaseTimeout)
+	authService := service.NewAuthService(zapLogger, authStorage, oauthCodesCache, oauthConfig, authConfig.JWTConfig.SigningKey)
 	authHandler := handler.NewHandler(zapLogger, authService)
 
 	srv := server.NewAuthServiceServer(authConfig.ServerConfig.Port, authHandler.InitRoutes())

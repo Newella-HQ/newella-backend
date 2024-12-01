@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
@@ -12,11 +13,12 @@ import (
 )
 
 type AuthServiceConfig struct {
-	PostgresConfig config.PostgresConfig
-	ServerConfig   config.ServerConfig
-	OAuthConfig    config.OAuthConfig
-	JWTConfig      config.JWTConfig
-	LogLevel       config.LogLevel
+	PostgresConfig  config.PostgresConfig
+	ServerConfig    config.ServerConfig
+	OAuthConfig     config.OAuthConfig
+	JWTConfig       config.JWTConfig
+	LogLevel        config.LogLevel
+	DatabaseTimeout time.Duration
 }
 
 func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
@@ -50,7 +52,8 @@ func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
 		JWTConfig: config.JWTConfig{
 			SigningKey: GetAndValidateEnv("JWT_SIGNING_KEY"),
 		},
-		LogLevel: config.ConvertLogLevel(GetAndValidateEnv("LOG_LEVEL")),
+		LogLevel:        config.ConvertLogLevel(GetAndValidateEnv("LOG_LEVEL")),
+		DatabaseTimeout: 15 * time.Second,
 	}, nil
 }
 
