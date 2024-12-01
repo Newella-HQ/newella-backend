@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS novels
     image       VARCHAR, -- may be null
     rating      FLOAT        NOT NULL,
     genre_id    INTEGER      NOT NULL,
-    user_id     INTEGER      NOT NULL,
+    user_id     VARCHAR(255) NOT NULL,
     FOREIGN KEY (genre_id) REFERENCES genres (id) ON DELETE SET NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );
