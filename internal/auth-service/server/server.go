@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"net/http"
+	"time"
 )
 
 type AuthServiceServer struct {
@@ -12,8 +13,9 @@ type AuthServiceServer struct {
 func NewAuthServiceServer(port string, handler http.Handler) *AuthServiceServer {
 	return &AuthServiceServer{
 		s: &http.Server{
-			Handler: handler,
-			Addr:    ":" + port,
+			Handler:           handler,
+			Addr:              ":" + port,
+			ReadHeaderTimeout: 10 * time.Second,
 		},
 	}
 }

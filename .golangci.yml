@@ -42,6 +42,15 @@ linters-settings:
     # Tokens count to trigger issue, Default: 150
     threshold: 100
 
+  tagliatelle:
+    case:
+      rules:
+        json: snake
+        yaml: snake
+        env: upperSnake
+        envconfig: upperSnake
+#        whatever: snake
+
 issues:
   max-same-issues: 0
   max-issues-per-linter: 0
