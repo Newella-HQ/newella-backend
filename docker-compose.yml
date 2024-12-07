@@ -1,4 +1,17 @@
 services:
+  static-server:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile_StaticServer
+    container_name: static-server
+    restart: unless-stopped
+    volumes:
+      - newella_assets:/go/assets
+    ports:
+      - "${STATIC_SERVER_PORT}:${STATIC_SERVER_PORT}"
+    networks:
+      - appnet
+
   auth-service:
     build:
       context: .
@@ -35,6 +48,7 @@ services:
       - appnet
 
 volumes:
+  newella_assets:
   newella_db_tmp:
 
 networks:
