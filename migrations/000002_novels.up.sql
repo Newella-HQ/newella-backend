@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS genres
 );
 
 CREATE TYPE novel_length AS ENUM ('small', 'normal', 'large');
-CREATE TYPE novel_status AS ENUM ('small', 'normal', 'large');
 
 CREATE TABLE IF NOT EXISTS novels
 (

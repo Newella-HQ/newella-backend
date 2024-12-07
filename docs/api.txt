@@ -1,0 +1,53 @@
+GET /auth
+in:
+out:
+{
+    "message": "ok",
+    "payload": "some url"
+}
+
+GET /redirect
+in:
+out:
+{
+    "message": "err message if code != 200",
+    "payload": {
+        "access_token": "можно раздекодить, поля внизу описаны",
+        "refresh_token": "просто фарш"
+    }
+}
+---------------------------
+type NewellaJWTToken struct { // это access token
+	UserID         string `json:"user_id"`
+	Role           string `json:"role"`
+	Email          string `json:"email"`
+	EmailVerified  bool   `json:"email_verified"`
+	Audience       string `json:"aud"`
+	ExpirationTime int64  `json:"exp"`
+	IssuedAt       int64  `json:"iat"`
+	Issuer         string `json:"iss"`
+}
+---------------------------
+
+POST /refresh
+in: (+ access token in Header)
+{
+    "access_token": "dqwdqdqwd",
+    "refresh_token": "dqwdqwdsadasdwq"
+}
+out:
+{
+    "message": "err message if code != 200",
+    "payload": {
+        "access_token": "можно раздекодить",
+        "refresh_token": "просто фарш"
+    }
+}
+
+DELETE logout
+in: (+ access token in Header)
+out:
+{
+    "message": "err message if code != 200",
+    "payload": null
+}
