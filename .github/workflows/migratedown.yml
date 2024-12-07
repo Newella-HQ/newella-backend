@@ -1,4 +1,4 @@
-name: Deploy
+name: MigrateDown
 
 on: workflow_dispatch
 
@@ -23,7 +23,7 @@ jobs:
             cd ~/newella/newella-backend
             git checkout main
             git pull
-            make up
+            make migrateDown
           
           EOF
           
