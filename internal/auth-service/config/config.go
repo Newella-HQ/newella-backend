@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -34,36 +33,27 @@ func InitAuthServiceConfig() (cfg *AuthServiceConfig, err error) {
 
 	return &AuthServiceConfig{
 		PostgresConfig: config.PostgresConfig{
-			Host:     GetAndValidateEnv("POSTGRES_HOST"),
-			Port:     GetAndValidateEnv("POSTGRES_PORT"),
-			Username: GetAndValidateEnv("POSTGRES_USERNAME"),
-			Password: GetAndValidateEnv("POSTGRES_PASSWORD"),
-			Name:     GetAndValidateEnv("POSTGRES_NAME"),
-			SSLMode:  GetAndValidateEnv("POSTGRES_SSLMODE"),
+			Host:     config.GetAndValidateEnv("POSTGRES_HOST"),
+			Port:     config.GetAndValidateEnv("POSTGRES_PORT"),
+			Username: config.GetAndValidateEnv("POSTGRES_USERNAME"),
+			Password: config.GetAndValidateEnv("POSTGRES_PASSWORD"),
+			Name:     config.GetAndValidateEnv("POSTGRES_NAME"),
+			SSLMode:  config.GetAndValidateEnv("POSTGRES_SSLMODE"),
 		},
 		ServerConfig: config.ServerConfig{
-			Host: GetAndValidateEnv("SERVER_HOST"),
-			Port: GetAndValidateEnv("AUTH_SERVER_PORT"),
+			Host: config.GetAndValidateEnv("SERVER_HOST"),
+			Port: config.GetAndValidateEnv("AUTH_SERVER_PORT"),
 		},
 		OAuthConfig: config.OAuthConfig{
-			ClientID:     GetAndValidateEnv("GOOGLE_CLIENT_ID"),
-			ClientSecret: GetAndValidateEnv("GOOGLE_CLIENT_SECRET"),
+			ClientID:     config.GetAndValidateEnv("GOOGLE_CLIENT_ID"),
+			ClientSecret: config.GetAndValidateEnv("GOOGLE_CLIENT_SECRET"),
 		},
 		JWTConfig: config.JWTConfig{
-			SigningKey: GetAndValidateEnv("JWT_SIGNING_KEY"),
+			SigningKey: config.GetAndValidateEnv("JWT_SIGNING_KEY"),
 		},
-		LogLevel:        config.ConvertLogLevel(GetAndValidateEnv("LOG_LEVEL")),
+		LogLevel:        config.ConvertLogLevel(config.GetAndValidateEnv("LOG_LEVEL")),
 		DatabaseTimeout: 15 * time.Second,
 	}, nil
-}
-
-func GetAndValidateEnv(key string) string {
-	s := os.Getenv(key)
-	if s == "" {
-		panic(fmt.Sprintf("empty %s parameter", key))
-	}
-
-	return s
 }
 
 const (
