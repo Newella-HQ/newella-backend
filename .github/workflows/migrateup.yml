@@ -3,7 +3,7 @@ name: MigrateUp
 on: workflow_dispatch
 
 jobs:
-  deploy:
+  migrateUp:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

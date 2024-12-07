@@ -1,6 +1,9 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type PostgresConfig struct {
 	Host     string
@@ -52,4 +55,13 @@ func ConvertLogLevel(lvl string) LogLevel {
 	}
 
 	return Debug
+}
+
+func GetAndValidateEnv(key string) string {
+	s := os.Getenv(key)
+	if s == "" {
+		panic(fmt.Sprintf("empty %s parameter", key))
+	}
+
+	return s
 }
