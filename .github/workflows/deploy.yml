@@ -1,0 +1,36 @@
+name: Deploy
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: SSH and run commands
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
+        run: |
+          # copy SSH private key and set rights
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          
+          # connect to server
+          ssh -o StrictHostKeyChecking=no -i private_key.pem root@db-cloud.ru <<EOF
+          
+            cd ~/newella/newella-backend
+            git checkout main
+            git pull
+            make up
+          
+          EOF
+          
+          rm -f private_key.pem
+        permissions:
+          contents: read
+          actions: write
+          id-token: write
+
+
