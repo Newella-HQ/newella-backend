@@ -12,6 +12,19 @@ services:
     networks:
       - appnet
 
+  user-service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile_UserService
+    container_name:   user-service
+    restart: unless-stopped
+    ports:
+      - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
+    depends_on:
+      - postgres-db
+    networks:
+      - appnet
+
   postgres-db:
     image: postgres:alpine3.20
     container_name: postgres-db
@@ -34,7 +47,21 @@ services:
     networks:
       - appnet
 
+  static-server:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile_StaticServer
+    container_name: static-server
+    restart: unless-stopped
+    volumes:
+      - newella_assets:/go/assets
+    ports:
+      - "${STATIC_SERVER_PORT}:${STATIC_SERVER_PORT}"
+    networks:
+      - appnet
+
 volumes:
+  newella_assets:
   newella_db_tmp:
 
 networks:

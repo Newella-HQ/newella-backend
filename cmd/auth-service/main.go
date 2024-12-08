@@ -14,11 +14,11 @@ import (
 
 	"github.com/Newella-HQ/newella-backend/internal/auth-service/config"
 	"github.com/Newella-HQ/newella-backend/internal/auth-service/handler"
-	"github.com/Newella-HQ/newella-backend/internal/auth-service/server"
 	"github.com/Newella-HQ/newella-backend/internal/auth-service/service"
 	"github.com/Newella-HQ/newella-backend/internal/auth-service/storage"
 	sharedcfg "github.com/Newella-HQ/newella-backend/internal/config"
 	"github.com/Newella-HQ/newella-backend/internal/logger"
+	"github.com/Newella-HQ/newella-backend/internal/server"
 )
 
 const (
@@ -62,7 +62,7 @@ func main() {
 	authService := service.NewAuthService(zapLogger, authStorage, oauthCodesCache, oauthConfig, authConfig.JWTConfig.SigningKey)
 	authHandler := handler.NewHandler(zapLogger, authService)
 
-	srv := server.NewAuthServiceServer(authConfig.ServerConfig.Port, authHandler.InitRoutes())
+	srv := server.NewServiceServer(authConfig.ServerConfig.Port, authHandler.InitRoutes())
 
 	go func() {
 		if err := srv.Start(); !errors.Is(err, http.ErrServerClosed) {
