@@ -63,6 +63,20 @@ func InterceptorLogger(l logger.Logger) logging.Logger {
 	})
 }
 
+func filterNilsAndEmptyStrings(l []any) []any {
+	var filtered []any
+	for _, v := range l {
+		if v != nil {
+			if str := fmt.Sprintf("%s", v); str == "" {
+				filtered = append(filtered, " ")
+				continue
+			}
+			filtered = append(filtered, v)
+		}
+	}
+	return filtered
+}
+
 func (g *GRPCServer) Run(port string) error {
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {

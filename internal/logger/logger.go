@@ -58,7 +58,7 @@ func NewZapLogger(level config.LogLevel) (*ZapLogger, error) {
 
 func (l *ZapLogger) With(args ...interface{}) Logger {
 	return &ZapLogger{
-		logger: l.logger.With(args),
+		logger: l.logger.With(args...),
 	}
 }
 

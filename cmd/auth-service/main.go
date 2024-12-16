@@ -62,7 +62,7 @@ func main() {
 	authService := service.NewAuthService(zapLogger, authStorage, oauthCodesCache, oauthConfig, authConfig.JWTConfig.SigningKey)
 	authHandler := handler.NewHandler(zapLogger, authService)
 
-	srv := server.NewServiceServer(authConfig.ServerConfig.Port, authHandler.InitRoutes())
+	srv := server.NewHTTPServer(authConfig.ServerConfig.Port, authHandler.InitRoutes())
 
 	go func() {
 		if err := srv.Start(); !errors.Is(err, http.ErrServerClosed) {

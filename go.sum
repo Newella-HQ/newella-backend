@@ -6,8 +6,8 @@ github.com/MicahParks/jwkset v0.5.19 h1:XZCsgJv05DBCvxEHYEHlSafqiuVn5ESG0VRB331F
 github.com/MicahParks/jwkset v0.5.19/go.mod h1:q8ptTGn/Z9c4MwbcfeCDssADeVQb3Pk7PnVxrvi+2QY=
 github.com/MicahParks/keyfunc/v3 v3.3.5 h1:7ceAJLUAldnoueHDNzF8Bx06oVcQ5CfJnYwNt1U3YYo=
 github.com/MicahParks/keyfunc/v3 v3.3.5/go.mod h1:SdCCyMJn/bYqWDvARspC6nCT8Sk74MjuAY22C7dCST8=
-github.com/Newella-HQ/protos v0.0.4 h1:UMM18tIX8N8oWc424VAQsOgUJOMGhXCogq0YJfQOIAw=
-github.com/Newella-HQ/protos v0.0.4/go.mod h1:rXAPPTyeQ079UkDysCL/l0a2JRN4/YCB8PMevuYcqDM=
+github.com/Newella-HQ/protos v0.0.5 h1:Zyd6G++dNP/iDtpZhLgMiqe/V9PaSVEIvcoMCKrnxbk=
+github.com/Newella-HQ/protos v0.0.5/go.mod h1:rXAPPTyeQ079UkDysCL/l0a2JRN4/YCB8PMevuYcqDM=
 github.com/akyoto/cache v1.0.6 h1:5XGVVYoi2i+DZLLPuVIXtsNIJ/qaAM16XT0LaBaXd2k=
 github.com/akyoto/cache v1.0.6/go.mod h1:WfxTRqKhfgAG71Xh6E3WLpjhBtZI37O53G4h5s+3iM4=
 github.com/bytedance/sonic v1.12.5 h1:hoZxY8uW+mT+OpkcUWw4k0fDINtOcVavEsGfzwzFU/w=

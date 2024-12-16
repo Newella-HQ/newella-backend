@@ -13,6 +13,7 @@ import (
 
 	"github.com/Newella-HQ/newella-backend/internal/logger"
 	"github.com/Newella-HQ/newella-backend/internal/model"
+	"github.com/Newella-HQ/newella-backend/internal/token"
 )
 
 const (
@@ -199,22 +200,7 @@ func (s *AuthService) RefreshTokens(ctx context.Context, tokenPair model.TokenPa
 }
 
 func (s *AuthService) ParseAccessToken(signed string) (*model.NewellaJWTToken, error) {
-	token, err := jwt.ParseWithClaims(signed, &model.NewellaJWTToken{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("ivalid signing method")
-		}
-		return []byte(s.singingKey), nil
-	})
-	if err != nil {
-		return nil, fmt.Errorf("can't parse jwt token: %w", err)
-	}
-
-	accessToken, ok := token.Claims.(*model.NewellaJWTToken)
-	if !ok {
-		return nil, fmt.Errorf("can't cast to newella jwt token: %w", err)
-	}
-
-	return accessToken, nil
+	return token.ParseAccessToken(signed, s.singingKey)
 }
 
 func (s *AuthService) RemoveTokens(ctx context.Context, userID string) error {

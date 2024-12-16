@@ -41,7 +41,7 @@ func main() {
 
 	h := handler.NewHandler(zapLogger)
 
-	srv := server.NewServiceServer(cfg.ServerConfig.Port, h.InitRoutes())
+	srv := server.NewHTTPServer(cfg.ServerConfig.Port, h.InitRoutes())
 
 	go func() {
 		if err := srv.Start(); !errors.Is(err, http.ErrServerClosed) {

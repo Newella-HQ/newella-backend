@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/MicahParks/keyfunc/v3 v3.3.5
-	github.com/Newella-HQ/protos v0.0.4
+	github.com/Newella-HQ/protos v0.0.5
 	github.com/akyoto/cache v1.0.6
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
@@ -15,6 +15,7 @@ require (
 	go.uber.org/zap v1.27.0
 	golang.org/x/oauth2 v0.24.0
 	google.golang.org/grpc v1.67.1
+	google.golang.org/protobuf v1.35.2
 )
 
 require (
@@ -52,6 +53,5 @@ require (
 	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

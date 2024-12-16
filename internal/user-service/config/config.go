@@ -12,6 +12,7 @@ import (
 type UserServiceConfig struct {
 	PostgresConfig  config.PostgresConfig
 	ServerConfig    config.ServerConfig
+	JWTConfig       config.JWTConfig
 	LogLevel        config.LogLevel
 	DatabaseTimeout time.Duration
 }
@@ -39,6 +40,9 @@ func InitUserServiceConfig() (cfg *UserServiceConfig, err error) {
 		ServerConfig: config.ServerConfig{
 			Host: config.GetAndValidateEnv("SERVER_HOST"),
 			Port: config.GetAndValidateEnv("USER_SERVICE_GRPC_PORT"),
+		},
+		JWTConfig: config.JWTConfig{
+			SigningKey: config.GetAndValidateEnv("JWT_SIGNING_KEY"),
 		},
 		LogLevel:        config.ConvertLogLevel(config.GetAndValidateEnv("LOG_LEVEL")),
 		DatabaseTimeout: 15 * time.Second,

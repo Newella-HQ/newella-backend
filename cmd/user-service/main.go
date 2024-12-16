@@ -49,7 +49,7 @@ func main() {
 	}()
 
 	postgresStorage := storage.NewUserStorage(zapLogger, dbConn, cfg.DatabaseTimeout)
-	h := handler.NewUserServiceHandler(zapLogger, postgresStorage)
+	h := handler.NewUserServiceHandler(zapLogger, postgresStorage, cfg.JWTConfig.SigningKey)
 
 	srv := server.NewGRPCServer(zapLogger, true, true)
 
