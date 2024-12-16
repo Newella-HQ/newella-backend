@@ -1,0 +1,11 @@
+FROM golang:1.23-alpine3.19
+
+ENV GOPATH=/
+RUN go env -w GOCACHE=/.cache
+
+COPY ./ ./
+
+RUN go install github.com/maoueh/zap-pretty@latest
+RUN --mount=type=cache,target=/.cache go build -mod=vendor -v -o user-service ./cmd/user-service
+
+ENTRYPOINT ./user-service | zap-pretty

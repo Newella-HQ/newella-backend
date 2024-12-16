@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
-type AuthServiceServer struct {
+type HTTPServer struct {
 	s *http.Server
 }
 
-func NewAuthServiceServer(port string, handler http.Handler) *AuthServiceServer {
-	return &AuthServiceServer{
+func NewHTTPServer(port string, handler http.Handler) *HTTPServer {
+	return &HTTPServer{
 		s: &http.Server{
 			Handler:           handler,
 			Addr:              ":" + port,
@@ -20,10 +20,10 @@ func NewAuthServiceServer(port string, handler http.Handler) *AuthServiceServer 
 	}
 }
 
-func (s *AuthServiceServer) Start() error {
+func (s *HTTPServer) Start() error {
 	return s.s.ListenAndServe()
 }
 
-func (s *AuthServiceServer) Shutdown(ctx context.Context) error {
+func (s *HTTPServer) Shutdown(ctx context.Context) error {
 	return s.s.Shutdown(ctx)
 }
